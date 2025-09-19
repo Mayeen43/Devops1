@@ -1,1 +1,33 @@
-...paste the YAML above...
+name: Print file contents on push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  print-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Read and print index.html or hello.txt
+        run: |
+          echo "Repository root files:"
+          ls -la
+
+          if [ -f index.html ]; then
+            echo "===== index.html ====="
+            cat index.html
+            echo "======================"
+          elif [ -f hello.txt ]; then
+            echo "===== hello.txt ====="
+            cat hello.txt
+            echo "====================="
+          else
+            echo "No index.html or hello.txt found at repository root."
+            # If you want the workflow to succeed even when file missing, comment out the next line
+            exit 1
+          fi
+
